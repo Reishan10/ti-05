@@ -1,6 +1,6 @@
 @extends('layouts.backend_main')
 
-@section('title', 'Tambah Postingan')
+@section('title', 'Edit Postingan')
 
 @section('content')
     <!-- Quill css -->
@@ -20,9 +20,10 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">Tambah Postingan</h4>
+                    <h4 class="page-title">Edit Postingan</h4>
                 </div>
-                <form action="{{ route('post.store') }}" method="post" id="form" enctype="multipart/form-data">
+                <form action="{{ route('post.update', $post->id) }}" method="post" id="form"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-7">
@@ -30,19 +31,20 @@
                                 <div class="card-body">
                                     <div class="mb-3">
                                         <label for="title" class="form-label">Title</label>
+                                        <input type="hidden" name="id" id="id" value="{{ $post->id }}">
                                         <input type="text" id="title" name="title" class="form-control"
-                                            value="{{ old('title') }}">
+                                            value="{{ $post->title }}">
                                         <div class="invalid-feedback errorTitle"></div>
 
                                         <input type="text" id="slug" name="slug" class="form-control mt-2"
                                             placeholder="Permalink" style="background-color: #F8F8F8; color:blue;"
-                                            value="{{ old('slug') }}">
+                                            value="{{ $post->slug }}">
                                         <div class="invalid-feedback errorSlug"></div>
 
                                     </div>
                                     <div class="mb-3">
                                         <label for="content" class="form-label">Content</label>
-                                        <textarea id="simplemde1" class="form-control" name="content">{{ old('content') }}</textarea>
+                                        <textarea id="simplemde1" class="form-control" name="content">{{ $post->content }}</textarea>
                                         <small class="text-danger errorContent"></small>
                                     </div>
                                 </div> <!-- end card body-->
@@ -53,7 +55,9 @@
                                 <div class="card-body">
                                     <div class="mb-3">
                                         <label for="image" class="form-label">Image</label>
-                                        <input type="file" class="dropify" name="image" id="image">
+                                        <input type="file" class="dropify" name="image" id="image"
+                                            value="{{ $post->image }}" data-height="190"
+                                            data-default-file="{{ asset('storage/' . $post->image) }}">
                                         <small class="text-danger errorImage"></small>
                                     </div>
                                     <div class="mb-3">
@@ -61,7 +65,9 @@
                                         <select name="kategori" id="kategori" class="form-control">
                                             <option value="">-- Pilih Kategori --</option>
                                             @foreach ($kategori as $row)
-                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                                <option value="{{ $row->id }}"
+                                                    {{ $row->id == $post->kategori_id ? 'selected' : '' }}>
+                                                    {{ $row->name }}</option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback errorKategori"></div>
@@ -71,11 +77,16 @@
                                         <div style="overflow-y:scroll;height:150px;margin-bottom:30px;">
                                             <div class="form-group">
                                                 <label>
+                                                    <?php
+                                                    $post_tag = $post->tags;
+                                                    $strtag = explode(',', $post_tag);
+                                                    ?>
                                                     @foreach ($tag as $row)
                                                         <div class="form-group">
                                                             <label>
                                                                 <input type="checkbox" name="tag[]" id="tag"
-                                                                    value="{{ $row->name }}">
+                                                                    value="{{ $row->name }}"
+                                                                    @if (in_array($row->name, $strtag)) echo checked @endif>
                                                                 {{ $row->name }}
                                                             </label>
                                                         </div>
@@ -93,7 +104,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <label for="description" class="form-label">Meta Description</label>
-                                    <textarea name="description" id="description" rows="5" class="form-control"></textarea>
+                                    <textarea name="description" id="description" rows="5" class="form-control">{{ $post->deskripsi }}</textarea>
                                 </div>
                             </div>
                         </div> <!-- end card -->
@@ -119,11 +130,12 @@
 
             $('#form').submit(function(e) {
                 e.preventDefault();
+                let id = $('#id').val();
 
                 $.ajax({
                     data: new FormData(this),
-                    url: "{{ route('post.store') }}",
                     type: "POST",
+                    url: "{{ url('post/"+id+"') }}",
                     dataType: 'json',
                     processData: false,
                     contentType: false,

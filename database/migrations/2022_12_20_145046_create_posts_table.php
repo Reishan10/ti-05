@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('tags', 100)->nullable();
             $table->string('slug', 100);
             $table->integer('status');
-            $table->integer('views');
+            $table->integer('views')->nullable();
             $table->integer('user_id');
             $table->timestamps();
         });

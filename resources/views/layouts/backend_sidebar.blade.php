@@ -66,16 +66,16 @@
                 <div class="collapse {{ request()->segment(1) == 'kategori' ? 'show' : '' }}" id="sidebarPost">
                     <ul class="side-nav-second-level">
                         <li>
-                            <a href="apps-email-inbox.html">Tambah Postingan</a>
+                            <a href="{{ route('post.create') }}">Tambah Postingan</a>
                         </li>
                         <li>
-                            <a href="apps-email-read.html">Post List</a>
-                        </li>
-                        <li class="{{ request()->segment(1) == 'kategori' ? 'active' : '' }}">
-                            <a href="{{ url('kategori') }}">Kategori</a>
+                            <a href="{{ route('post.index') }}">Post List</a>
                         </li>
                         <li>
-                            <a href="{{ url('tag') }}">Tag</a>
+                            <a href="{{ route('kategori.index') }}">Kategori</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('tag.index') }}">Tag</a>
                         </li>
                     </ul>
                 </div>
@@ -134,10 +134,15 @@
                 </div>
             </li>
             <li class="side-nav-item">
-                <a href="apps-chat.html" class="side-nav-link">
+                <a href="{{ route('logout') }}" class="side-nav-link"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="uil-sign-out-alt"></i>
                     <span> Keluar </span>
                 </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
             </li>
         </ul>
         <!-- End Sidebar -->
