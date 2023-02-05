@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class TagController extends Controller
 {

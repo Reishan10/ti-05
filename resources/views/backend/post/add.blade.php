@@ -3,7 +3,6 @@
 @section('title', 'Tambah Postingan')
 
 @section('content')
-    <!-- Quill css -->
     <!-- SimpleMDE css -->
     <link href="{{ asset('assets') }}/css/vendor/simplemde.min.css" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets') }}/css/dropify.css" rel="stylesheet" type="text/css" />
@@ -201,7 +200,7 @@
 
         $('.dropify').dropify({
             messages: {
-                default: 'Upload',
+                default: 'Drag atau drop untuk memilih gambar',
                 replace: 'Ganti',
                 remove: 'Hapus',
                 error: 'error'

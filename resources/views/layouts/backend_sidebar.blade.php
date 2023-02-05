@@ -56,19 +56,20 @@
 
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarPost"
-                    aria-expanded="{{ request()->segment(1) == 'kategori' ? 'true' : 'false' }}"
+                    aria-expanded="{{ request()->segment(1) == 'kategori' ? 'true' : 'false' }} {{ request()->segment(1) == 'post' ? 'true' : 'false' }}"
                     aria-controls="sidebarPost"
                     class="side-nav-link {{ request()->segment(1) == 'kategori' ? 'collapsed' : '' }}">
                     <i class="uil-envelope"></i>
                     <span> Post </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse {{ request()->segment(1) == 'kategori' ? 'show' : '' }}" id="sidebarPost">
+                <div class="collapse {{ request()->segment(1) == 'kategori' ? 'show' : '' }}  {{ request()->segment(1) == 'post' ? 'show' : '' }}"
+                    id="sidebarPost">
                     <ul class="side-nav-second-level">
                         <li>
                             <a href="{{ route('post.create') }}">Tambah Postingan</a>
                         </li>
-                        <li>
+                        <li class="{{ request()->segment(3) == 'edit' ? 'active' : '' }}">
                             <a href="{{ route('post.index') }}">Post List</a>
                         </li>
                         <li>
@@ -95,7 +96,7 @@
                 </a>
             </li>
             <li class="side-nav-item">
-                <a href="apps-chat.html" class="side-nav-link">
+                <a href="{{ route('mahasiswa.index') }}" class="side-nav-link">
                     <i class="uil-users-alt"></i>
                     <span> Mahasiswa </span>
                 </a>

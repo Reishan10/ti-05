@@ -213,7 +213,7 @@
 
         $('.dropify').dropify({
             messages: {
-                default: 'Upload',
+                default: 'Drag atau drop untuk memilih gambar',
                 replace: 'Ganti',
                 remove: 'Hapus',
                 error: 'error'

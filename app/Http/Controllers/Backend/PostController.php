@@ -262,7 +262,6 @@ class PostController extends Controller
             $post->delete();
         }
 
-        // $post = Post::where('id', $request->id)->delete();
         return Response()->json(['post' => $post, 'success' => 'Data berhasil dihapus']);
     }
 
