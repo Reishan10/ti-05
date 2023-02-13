@@ -20,7 +20,8 @@
                                     <button type="button" class="btn btn-danger mb-3 btn-sm" id="btnHapusBanyak">
                                         <i class="mdi mdi-trash-can"></i> Hapus Banyak
                                     </button>
-                                    <button type="button" class="btn btn-primary mb-3 btn-sm" id="btnTambah">
+                                    <button type="button" class="btn btn-primary mb-3 btn-sm" id="btnTambah"
+                                        onclick="window.location='{{ route('mahasiswa.create') }}'">
                                         <i class="mdi mdi-plus"></i> Tambah Data
                                     </button>
                                 </div>
@@ -124,12 +125,22 @@
     <script src="{{ asset('assets') }}/js/dropify.js"></script>
 
     <script>
+        $('.dropify').dropify({
+            messages: {
+                default: 'Drag atau drop untuk memilih gambar',
+                replace: 'Ganti',
+                remove: 'Hapus',
+                error: 'error'
+            }
+        });
+
         function removeValidation(name, errorName) {
             $(name).removeClass('is-invalid');
             $(errorName).html('');
         }
 
         $(document).ready(function() {
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -173,119 +184,15 @@
                     }
                 ]
             });
+        });
 
-            // Tambah Data
-            $('#btnTambah').click(function() {
-                $('#nim').val('');
-                $('#mahasiswaModalLabel').html("Tambah Mahasiswa");
-                $('#mahasiswaModal').modal('show');
-                $('#mahasiswaForm').trigger("reset");
-
-                removeValidation('#nim', '.errorNIM');
-                removeValidation('#nama', '.errorNama');
-                removeValidation('#jenis_kelamin', '.errorJenisKelamin');
-                removeValidation('#tempat_lahir', '.errorTempatLahir');
-                removeValidation('#tgl_lahir', '.errorTanggalLahir');
-                removeValidation('#no_telepon', '.errorNoTelepon');
-                removeValidation('#foto', '.errorFoto');
-
-                $("#foto").next(".dropify-clear").trigger("click");
-            });
-
-            $('#mahasiswaForm').submit(function(e) {
-                e.preventDefault();
-                $.ajax({
-                    data: new FormData(this),
-                    url: "{{ route('mahasiswa.store') }}",
-                    type: "POST",
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    beforeSend: function() {
-                        $('#simpan').attr('disable', 'disabled');
-                        $('#simpan').text('Proses...');
-                    },
-                    complete: function() {
-                        $('#simpan').removeAttr('disable');
-                        $('#simpan').html('Simpan');
-                    },
-                    success: function(response) {
-                        if (response.errors) {
-                            if (response.errors.nim) {
-                                $('#nim').addClass('is-invalid');
-                                $('.errorNIM').html(response.errors.nim);
-                            } else {
-                                $('#nim').removeClass('is-invalid');
-                                $('.errorNIM').html('');
-                            }
-
-                            if (response.errors.nama) {
-                                $('#nama').addClass('is-invalid');
-                                $('.errorNama').html(response.errors.nama);
-                            } else {
-                                $('#nama').removeClass('is-invalid');
-                                $('.errorNama').html('');
-                            }
-
-                            if (response.errors.jenis_kelamin) {
-                                $('#jenis_kelamin').addClass('is-invalid');
-                                $('.errorJenisKelamin').html(response.errors.jenis_kelamin);
-                            } else {
-                                $('#jenis_kelamin').removeClass('is-invalid');
-                                $('.errorJenisKelamin').html('');
-                            }
-
-                            if (response.errors.tempat_lahir) {
-                                $('#tempat_lahir').addClass('is-invalid');
-                                $('.errorTempatLahir').html(response.errors.tempat_lahir);
-                            } else {
-                                $('#tempat_lahir').removeClass('is-invalid');
-                                $('.errorTempatLahir').html('');
-                            }
-
-                            if (response.errors.tgl_lahir) {
-                                $('#tgl_lahir').addClass('is-invalid');
-                                $('.errorTanggalLahir').html(response.errors.tgl_lahir);
-                            } else {
-                                $('#tgl_lahir').removeClass('is-invalid');
-                                $('.errorTanggalLahir').html('');
-                            }
-
-                            if (response.errors.no_telepon) {
-                                $('#no_telepon').addClass('is-invalid');
-                                $('.errorNoTelepon').html(response.errors.no_telepon);
-                            } else {
-                                $('#no_telepon').removeClass('is-invalid');
-                                $('.errorNoTelepon').html('');
-                            }
-
-                            if (response.errors.foto) {
-                                $('#foto').addClass('is-invalid');
-                                $('.errorFoto').html(response.errors.foto);
-                            } else {
-                                $('#foto').removeClass('is-invalid');
-                                $('.errorFoto').html('');
-                            }
-                        } else {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Sukses',
-                                text: 'Data berhasil disimpan',
-                            })
-
-                            $('#mahasiswaModal').modal('hide');
-                            $('#mahasiswaForm').trigger("reset");
-                            $("#foto").next(".dropify-clear").trigger("click");
-                            $('#datatable').DataTable().ajax.reload()
-                        }
-                    },
-                    error: function(xhr, ajaxOptions, thrownError) {
-                        console.error(xhr.status + "\n" + xhr.responseText + "\n" +
-                            thrownError);
-                    }
-                });
-            });
+        // Ceklis Checkbox Hapus Banyak
+        $('#check_all').on('click', function(e) {
+            if ($(this).is(':checked', true)) {
+                $(".checkbox").prop('checked', true);
+            } else {
+                $(".checkbox").prop('checked', false);
+            }
         });
 
         // Hapus Data
@@ -377,24 +284,6 @@
                         })
                     }
                 })
-            }
-        });
-
-        // Ceklis Checkbox Hapus Banyak
-        $('#check_all').on('click', function(e) {
-            if ($(this).is(':checked', true)) {
-                $(".checkbox").prop('checked', true);
-            } else {
-                $(".checkbox").prop('checked', false);
-            }
-        });
-
-        $('.dropify').dropify({
-            messages: {
-                default: 'Drag atau drop untuk memilih gambar',
-                replace: 'Ganti',
-                remove: 'Hapus',
-                error: 'error'
             }
         });
     </script>

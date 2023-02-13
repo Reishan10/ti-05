@@ -47,8 +47,8 @@ Route::middleware(['auth', 'user-access:superadmin'])->group(function () {
     // Posts
     Route::post('post/delete-multiple-post', [PostController::class, 'deleteMultiple'])->name('delete-multiple-post');
     Route::get('post', [PostController::class, 'index'])->name('post.index');
-    Route::post('post', [PostController::class, 'store'])->name('post.store');
     Route::get('post/create', [PostController::class, 'create'])->name('post.create');
+    Route::post('post', [PostController::class, 'store'])->name('post.store');
     Route::get('post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
     Route::post('post/{post}', [PostController::class, 'update'])->name('post.update');
     Route::delete('post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
@@ -56,8 +56,11 @@ Route::middleware(['auth', 'user-access:superadmin'])->group(function () {
     // Mahasiswa
     Route::post('mahasiswa/delete-multiple-mahasiswa', [MahasiswaController::class, 'deleteMultiple'])->name('delete-multiple-mahasiswa');
     Route::get('mahasiswa', [MahasiswaController::class, 'index'])->name('mahasiswa.index');
+    Route::get('mahasiswa/create', [MahasiswaController::class, 'create'])->name('mahasiswa.create');
     Route::post('mahasiswa', [MahasiswaController::class, 'store'])->name('mahasiswa.store');
-    Route::delete('mahasiswa/{nim}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
+    Route::get('mahasiswa/{mahasiswa}/edit', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
+    Route::post('mahasiswa/{mahasiswa}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
+    Route::delete('mahasiswa/{mahasiswa}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
 });
 
 /*------------------------------------------

@@ -37,7 +37,6 @@
                                             placeholder="Permalink" style="background-color: #F8F8F8; color:blue;"
                                             value="{{ old('slug') }}">
                                         <div class="invalid-feedback errorSlug"></div>
-
                                     </div>
                                     <div class="mb-3">
                                         <label for="content" class="form-label">Content</label>
@@ -118,7 +117,6 @@
 
             $('#form').submit(function(e) {
                 e.preventDefault();
-
                 $.ajax({
                     data: new FormData(this),
                     url: "{{ route('post.store') }}",
@@ -178,7 +176,6 @@
                             } else {
                                 $('.errorTags').html('');
                             }
-
 
                         } else {
                             Swal.fire({

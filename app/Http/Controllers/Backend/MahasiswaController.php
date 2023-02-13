@@ -28,8 +28,9 @@ class MahasiswaController extends Controller
                     return $comboBox;
                 })
                 ->addColumn('aksi', function ($data) {
-                    $btn = '<button type="button" class="btn btn-warning btn-sm me-1" data-nim="' . $data->nim . '" id="btnEdit"><i
-                    class="mdi mdi-pencil"></i></button>';
+                    $btn = '<button type="button" class="btn btn-info btn-sm me-1" data-nim="' . $data->nim . '" id="btnEdit"><i
+                    class="mdi mdi-eye"></i></button>';
+                    $btn = $btn . '<a href="' . route('mahasiswa.edit', $data->nim) . '" class="btn btn-warning btn-sm me-1"><i class="mdi mdi-pencil"></i></a>';
                     $btn = $btn . '<button type="button" class="btn btn-danger btn-sm" data-nim="' . $data->nim . '" id="btnHapus"><i
                     class="mdi mdi-trash-can"></i></button>';
                     return $btn;
@@ -40,9 +41,14 @@ class MahasiswaController extends Controller
         return view('backend.mahasiswa.index');
     }
 
+
+    public function create()
+    {
+        return view('backend.mahasiswa.add');
+    }
+
     public function store(Request $request)
     {
-        $nim = $request->nim;
         $validated = Validator::make(
             $request->all(),
             [
@@ -106,6 +112,79 @@ class MahasiswaController extends Controller
             }
         }
     }
+
+    public function edit($nim)
+    {
+        $data = Mahasiswa::find($nim);
+        return view('backend.mahasiswa.edit', compact('data'));
+    }
+
+    public function update(Request $request)
+    {
+        $nim = $request->nim;
+        $validated = Validator::make(
+            $request->all(),
+            [
+                'nim' => 'required|min:9',
+                'nama' => 'required',
+                'jenis_kelamin' => 'required',
+                'tempat_lahir' => 'required',
+                'tgl_lahir' => 'required',
+                'no_telepon' => 'required',
+                'foto' => 'image|mimes:jpg,png,jpeg,webp,svg',
+            ],
+            [
+                'nim.required' => 'Silakan isi NIM terlebih dahulu!',
+                'nim.unique' => 'NIM Sudah digunakan!',
+                'nim.min' => 'Minimal NIM 9 angka',
+                'nama.required' => 'Silakan isi nama terlebih dahulu!',
+                'jenis_kelamin.required' => 'Silakan pilih jenis kelamin terlebih dahulu!',
+                'tempat_lahir.required' => 'Silakan isi tempat lahir terlebih dahulu!',
+                'tgl_lahir.required' => 'Silakan isi tanggal lahir terlebih dahulu!',
+                'no_telepon.required' => 'Silakan isi no telepon terlebih dahulu!',
+                'foto.image' => 'File harus berupa gambar!',
+            ]
+        );
+
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        } else {
+            if ($request->hasFile('foto')) {
+                $file = $request->file('foto');
+                if ($file->isValid()) {
+                    $nim = $request->nim;
+                    $nama = $request->nama;
+                    $guessExtension = $request->file('foto')->guessExtension();
+                    $foto_path = $request->file('foto')->storeAs('images/mahasiswa', $nim . ' - ' . $nama . '.' . $guessExtension, 'public');
+                    $data = [
+                        'nim' => $nim,
+                        'nama' => $nama,
+                        'tempat_lahir' => $request->tempat_lahir,
+                        'tgl_lahir' => $request->tgl_lahir,
+                        'jenis_kelamin' => $request->jenis_kelamin,
+                        'no_telepon' => $request->no_telepon,
+                        'foto' => $foto_path,
+                    ];
+                    $mahasiswa = Mahasiswa::where('nim', $nim)->update($data);
+                    return response()->json($mahasiswa);
+                }
+            } else {
+                $nim = $request->nim;
+                $nama = $request->nama;
+                $data = [
+                    'nim' => $nim,
+                    'nama' => $nama,
+                    'tempat_lahir' => $request->tempat_lahir,
+                    'tgl_lahir' => $request->tgl_lahir,
+                    'jenis_kelamin' => $request->jenis_kelamin,
+                    'no_telepon' => $request->no_telepon,
+                ];
+                $mahasiswa = Mahasiswa::where('nim', $nim)->update($data);
+                return response()->json($mahasiswa);
+            }
+        }
+    }
+
 
     public function destroy(Request $request)
     {
