@@ -65,7 +65,11 @@ Route::middleware(['auth', 'user-access:superadmin'])->group(function () {
 
     // User
     Route::post('pengguna/delete-multiple-pengguna', [UserController::class, 'deleteMultiple'])->name('delete-multiple-pengguna');
+<<<<<<< HEAD
     Route::get('pengguna', [UserController::class, 'index'])->name('pengguna.index');
+=======
+    Route::get('pengguna', [UserController::class, 'index'])->name('user.index');
+>>>>>>> 2920b5612e17aed688b29a294d40d980343d9d30
     Route::post('pengguna', [UserController::class, 'store'])->name('pengguna.store');
     Route::get('pengguna/{pengguna}/edit', [UserController::class, 'edit'])->name('pengguna.edit');
     Route::delete('pengguna/{pengguna}', [UserController::class, 'destroy'])->name('pengguna.destroy');

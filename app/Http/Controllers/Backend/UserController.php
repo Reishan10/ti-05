@@ -47,13 +47,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $id = $request->id;
+<<<<<<< HEAD
         $email = $request->email;
+=======
+>>>>>>> 2920b5612e17aed688b29a294d40d980343d9d30
 
         $validated = Validator::make(
             $request->all(),
             [
                 'name' => ['required', 'string', 'max:255'],
+<<<<<<< HEAD
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
+=======
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+>>>>>>> 2920b5612e17aed688b29a294d40d980343d9d30
                 'role' => ['required'],
             ],
             [
