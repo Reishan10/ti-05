@@ -152,6 +152,12 @@ class MahasiswaController extends Controller
             if ($request->hasFile('foto')) {
                 $file = $request->file('foto');
                 if ($file->isValid()) {
+                    $mahasiswa = Mahasiswa::findOrFail($nim);
+
+                    if (Storage::exists($mahasiswa->foto)) {
+                        Storage::delete($mahasiswa->foto);
+                    }
+
                     $nim = $request->nim;
                     $nama = $request->nama;
                     $guessExtension = $request->file('foto')->guessExtension();

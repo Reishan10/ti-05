@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\KategoriController;
 use App\Http\Controllers\Backend\MahasiswaController;
 use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\TagController;
+use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -61,6 +62,13 @@ Route::middleware(['auth', 'user-access:superadmin'])->group(function () {
     Route::get('mahasiswa/{mahasiswa}/edit', [MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
     Route::post('mahasiswa/{mahasiswa}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
     Route::delete('mahasiswa/{mahasiswa}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
+
+    // User
+    Route::post('pengguna/delete-multiple-pengguna', [UserController::class, 'deleteMultiple'])->name('delete-multiple-pengguna');
+    Route::get('pengguna', [UserController::class, 'index'])->name('pengguna.index');
+    Route::post('pengguna', [UserController::class, 'store'])->name('pengguna.store');
+    Route::get('pengguna/{pengguna}/edit', [UserController::class, 'edit'])->name('pengguna.edit');
+    Route::delete('pengguna/{pengguna}', [UserController::class, 'destroy'])->name('pengguna.destroy');
 });
 
 /*------------------------------------------

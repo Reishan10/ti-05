@@ -110,7 +110,7 @@
             </li>
 
             <li class="side-nav-item">
-                <a href="apps-chat.html" class="side-nav-link">
+                <a href="{{ route("pengguna.index") }}" class="side-nav-link">
                     <i class="uil-user"></i>
                     <span> Pengguna </span>
                 </a>
